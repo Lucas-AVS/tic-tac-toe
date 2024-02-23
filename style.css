@@ -1,0 +1,11 @@
+#empty {
+    background-color: blue;
+    width: 30px;
+    height: 30px;
+}
+
+#marked {
+    background-color: brown;
+    width: 30px;
+    height: 30px;
+}
