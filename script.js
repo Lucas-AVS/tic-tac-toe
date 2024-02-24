@@ -4,46 +4,118 @@
 const markingAreaContainer = document.querySelector(".markingAreaContainer");
 
 const setGameBoard = (() => {
-  //   let gameBoard = new Array(9);
-  let gameBoard = {
-    1: "lul",
-    2: undefined,
-    3: "lol",
-    4: undefined,
-    5: undefined,
-    6: undefined,
-    7: undefined,
-    8: undefined,
-    9: undefined,
-  };
+  let gameBoard = Array(9).fill(undefined);
 
   function player(name) {
     return { name };
   }
 
-  function displayController() {
-    Object.entries(gameBoard).forEach(([key, value]) => {
+  // gameBoard.splice(8, 1, "x");
+
+  let index = 0;
+  (function displayController() {
+    gameBoard.forEach((element) => {
+      index += 1;
       const markingArea = document.createElement("div");
+      markingArea.id = `${index}-position`;
       {
-        value == undefined
-          ? (markingArea.id = "empty")
-          : (markingArea.id = "marked");
+        if (element == undefined) {
+          markingArea.className = "undefined";
+        }
+        if (element == "x") {
+          markingArea.className = "x";
+        }
+        if (element == "o") {
+          markingArea.className = "o";
+        }
       }
       markingAreaContainer.appendChild(markingArea);
     });
+  })();
+
+  function checkWinner(player) {
+    // Check rows
+    for (let i = 0; i < 9; i += 3) {
+      if (
+        gameBoard[i] === player &&
+        gameBoard[i + 1] === player &&
+        gameBoard[i + 2] === player
+      ) {
+        return true;
+      }
+    }
+
+    // Check columns
+    for (let i = 0; i < 3; i++) {
+      if (
+        gameBoard[i] === player &&
+        gameBoard[i + 3] === player &&
+        gameBoard[i + 6] === player
+      ) {
+        return true;
+      }
+    }
+
+    // Check diagonals
+    if (
+      (gameBoard[0] === player &&
+        gameBoard[4] === player &&
+        gameBoard[8] === player) ||
+      (gameBoard[2] === player &&
+        gameBoard[4] === player &&
+        gameBoard[6] === player)
+    ) {
+      return true;
+    }
+
+    return false;
+  }
+
+  function finishGame() {
+    if (checkWinner("x")) {
+      return console.log("PlayerX wins");
+    } else if (checkWinner("o")) {
+      return console.log("PlayerO wins");
+    } else {
+      return console.log("In match");
+    }
+  }
+
+  const handlePlay = (selectedArea, currentPlayer) => {
+    gameBoard.splice(
+      selectedArea - 1,
+      1,
+      currentPlayer.name == playerX ? "x" : "o"
+    );
+    console.log(selectedArea);
+    console.log(currentPlayer.name);
+    console.log(gameBoard);
+    finishGame();
+  };
+
+  function clickEventAreas() {
+    for (let i = 1; i < 10; i++) {
+      const markingAreaDiv = document.getElementById(`${i}-position`);
+
+      if (markingAreaDiv) {
+        markingAreaDiv.addEventListener("click", () => handlePlay(i, playerX));
+      } else {
+        console.log("nao");
+      }
+    }
   }
 
   return {
     gameBoard,
     player,
-    displayController,
+    finishGame,
+    clickEventAreas,
   };
 })();
 
-const player1 = setGameBoard.player("player1");
-const player2 = setGameBoard.player("player2");
+const playerX = setGameBoard.player("playerX");
+const playerO = setGameBoard.player("playerY");
 
-console.log(player1);
-console.log(setGameBoard.gameBoard);
+setGameBoard.clickEventAreas();
 
-setGameBoard.displayController();
+setGameBoard.finishGame();
