@@ -1,11 +1,49 @@
-#empty {
-    background-color: blue;
-    width: 30px;
-    height: 30px;
+:root {
+    --purple: #5B2F47;
+    --grey: #C1AEBE;
+    --black: #2A363B;
+    --wine: #8A3444;
+  
+    margin: 0;
+    padding: 0;
+  
+    font-family: "Lora", serif;
+  }
+
+body {
+    min-height: 100vh;
+    background: linear-gradient(var(--purple)700px, var(--wine) 700px);
 }
 
-#marked {
-    background-color: brown;
-    width: 30px;
-    height: 30px;
+h1 {
+    width: 100px;
+    margin: 32px auto;
+    font-size: 3rem;
+    color: var(--grey);
 }
+
+.markingAreaContainer {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    margin: 0 auto;
+    height: 320px;
+    width: 320px;
+
+}
+
+.markingAreaContainer div {
+    background-color: var(--grey);
+    height: 100px;
+    width: 100px;
+}
+
+.footer {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    text-align: center;
+    color: var(--grey);
+    text-align: center;
+    font-size: 1.1rem;
+  }
