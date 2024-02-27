@@ -84,6 +84,10 @@ class Board {
     return false;
   }
 
+  isBoardFull() {
+    return this.board.every((cell) => cell !== undefined);
+  }
+
   finishGame() {
     if (this.checkWinner("x")) {
       alert("PlayerX wins");
@@ -94,6 +98,11 @@ class Board {
     if (this.checkWinner("o")) {
       alert("PlayerO wins");
       this.board = Array(9).fill(undefined);
+      this.currentPlayer = 0;
+      this.renderBoard();
+    }
+    if (this.isBoardFull()) {
+      alert("It's a draw!");
       this.currentPlayer = 0;
       this.renderBoard();
     }
