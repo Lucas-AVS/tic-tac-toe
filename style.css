@@ -37,7 +37,7 @@ h1 {
     width: 100px;
 }
 
-.o {
+.o,.x {
     display: flex;
     font-size: 3.5rem;
     text-align: center;
