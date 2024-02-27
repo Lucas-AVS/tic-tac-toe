@@ -37,6 +37,15 @@ h1 {
     width: 100px;
 }
 
+.o {
+    display: flex;
+    font-size: 3.5rem;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    color: var(--black);
+}
+
 .footer {
     position: absolute;
     right: 0;
@@ -46,4 +55,6 @@ h1 {
     color: var(--grey);
     text-align: center;
     font-size: 1.1rem;
-  }
+}
+
+
