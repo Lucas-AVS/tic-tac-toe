@@ -53,9 +53,9 @@ class Board {
     // Check rows
     for (let i = 0; i < 9; i += 3) {
       if (
-        board[i] === player &&
-        board[i + 1] === player &&
-        board[i + 2] === player
+        this.board[i] === player &&
+        this.board[i + 1] === player &&
+        this.board[i + 2] === player
       ) {
         return true;
       }
