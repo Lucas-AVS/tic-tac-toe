@@ -1,45 +1,61 @@
-// class gameBoard {
-//   static _gameBoard = new Array(9);
-// }
-const markingAreaContainer = document.querySelector(".markingAreaContainer");
-
-const setGameBoard = (() => {
-  let gameBoard = Array(9).fill(undefined);
-
-  function player(name) {
-    return { name };
+class Board {
+  constructor() {
+    this.board = Array(9).fill(undefined);
+    this.currentPlayer = 0;
+    this.markingAreaContainer = document.querySelector(".markingAreaContainer");
+    this.init();
   }
 
-  let index = 0;
-  (function displayController() {
-    gameBoard.forEach((element) => {
-      index += 1;
-      const markingArea = document.createElement("div");
-      markingArea.id = `${index}-position`;
-      {
-        if (element == undefined) {
-          markingArea.className = "undefined";
-        }
-        if (element == "x") {
-          markingArea.className = "x";
-          markingArea.appendChild(document.createTextNode("x"));
-        }
-        if (element == "o") {
-          markingArea.className = "o";
-          markingArea.appendChild(document.createTextNode("x"));
-        }
-      }
-      markingAreaContainer.appendChild(markingArea);
-    });
-  })();
+  init() {
+    this.renderBoard();
+    this.setupEventListeners();
+  }
 
-  function checkWinner(player) {
+  renderBoard() {
+    this.markingAreaContainer.innerHTML = "";
+
+    this.board.forEach((_, index) => {
+      const markingArea = document.createElement("div");
+      markingArea.id = `${index + 1}-position`;
+      markingArea.className = "undefined";
+      this.markingAreaContainer.appendChild(markingArea);
+    });
+  }
+
+  setupEventListeners() {
+    this.markingAreaContainer.addEventListener("click", (event) => {
+      if (event.target.id) {
+        const selectedArea = parseInt(event.target.id.split("-")[0]);
+        this.handlePlay(selectedArea);
+      }
+    });
+  }
+
+  handlePlay(selectedArea) {
+    const markingArea = document.getElementById(`${selectedArea}-position`);
+
+    if (markingArea.className === "undefined") {
+      const symbol = this.currentPlayer % 2 ? "x" : "o";
+      this.currentPlayer += 1;
+
+      this.board.splice(selectedArea - 1, 1, symbol);
+
+      markingArea.className = symbol;
+      markingArea.textContent = symbol.toUpperCase();
+
+      this.finishGame();
+    } else {
+      alert("Select a non-marked area");
+    }
+  }
+
+  checkWinner(player) {
     // Check rows
     for (let i = 0; i < 9; i += 3) {
       if (
-        gameBoard[i] === player &&
-        gameBoard[i + 1] === player &&
-        gameBoard[i + 2] === player
+        board[i] === player &&
+        board[i + 1] === player &&
+        board[i + 2] === player
       ) {
         return true;
       }
@@ -47,78 +63,41 @@ const setGameBoard = (() => {
     // Check columns
     for (let i = 0; i < 3; i++) {
       if (
-        gameBoard[i] === player &&
-        gameBoard[i + 3] === player &&
-        gameBoard[i + 6] === player
+        this.board[i] === player &&
+        this.board[i + 3] === player &&
+        this.board[i + 6] === player
       ) {
         return true;
       }
     }
     // Check diagonals
     if (
-      (gameBoard[0] === player &&
-        gameBoard[4] === player &&
-        gameBoard[8] === player) ||
-      (gameBoard[2] === player &&
-        gameBoard[4] === player &&
-        gameBoard[6] === player)
+      (this.board[0] === player &&
+        this.board[4] === player &&
+        this.board[8] === player) ||
+      (this.board[2] === player &&
+        this.board[4] === player &&
+        this.board[6] === player)
     ) {
       return true;
     }
     return false;
   }
 
-  function finishGame() {
-    if (checkWinner("x")) {
-      return console.log("PlayerX wins");
-    } else if (checkWinner("o")) {
-      return console.log("PlayerO wins");
-    } else {
-      return console.log("In match");
+  finishGame() {
+    if (this.checkWinner("x")) {
+      alert("PlayerX wins");
+      this.board = Array(9).fill(undefined);
+      this.currentPlayer = 0;
+      this.renderBoard();
+    }
+    if (this.checkWinner("o")) {
+      alert("PlayerO wins");
+      this.board = Array(9).fill(undefined);
+      this.currentPlayer = 0;
+      this.renderBoard();
     }
   }
+}
 
-  const handlePlay = (selectedArea, currentPlayer) => {
-    const markingArea = document.getElementById(`${selectedArea}-position`);
-
-    if (markingArea.className == "undefined") {
-      const symbol = currentPlayer.name === playerX ? "x" : "o";
-
-      gameBoard.splice(selectedArea - 1, 1, symbol);
-
-      markingArea.className = symbol;
-      markingArea.textContent = symbol.toUpperCase();
-
-      finishGame();
-    } else {
-      alert("Select a non-marked area");
-    }
-  };
-
-  function clickEventAreas() {
-    for (let i = 1; i < 10; i++) {
-      const markingAreaDiv = document.getElementById(`${i}-position`);
-
-      if (markingAreaDiv) {
-        markingAreaDiv.addEventListener("click", () => handlePlay(i, playerX));
-      } else {
-        console.log("nao");
-      }
-    }
-  }
-
-  return {
-    gameBoard,
-    player,
-    finishGame,
-    clickEventAreas,
-  };
-})();
-
-const playerX = setGameBoard.player("playerX");
-const playerO = setGameBoard.player("playerO");
-
-console.log(setGameBoard.player);
-setGameBoard.clickEventAreas();
-
-setGameBoard.finishGame();
+const game = new Board();
