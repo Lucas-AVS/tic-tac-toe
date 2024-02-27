@@ -10,8 +10,6 @@ const setGameBoard = (() => {
     return { name };
   }
 
-  // gameBoard.splice(8, 1, "x");
-
   let index = 0;
   (function displayController() {
     gameBoard.forEach((element) => {
@@ -24,9 +22,11 @@ const setGameBoard = (() => {
         }
         if (element == "x") {
           markingArea.className = "x";
+          markingArea.appendChild(document.createTextNode("x"));
         }
         if (element == "o") {
           markingArea.className = "o";
+          markingArea.appendChild(document.createTextNode("x"));
         }
       }
       markingAreaContainer.appendChild(markingArea);
@@ -44,7 +44,6 @@ const setGameBoard = (() => {
         return true;
       }
     }
-
     // Check columns
     for (let i = 0; i < 3; i++) {
       if (
@@ -55,7 +54,6 @@ const setGameBoard = (() => {
         return true;
       }
     }
-
     // Check diagonals
     if (
       (gameBoard[0] === player &&
@@ -67,7 +65,6 @@ const setGameBoard = (() => {
     ) {
       return true;
     }
-
     return false;
   }
 
@@ -82,15 +79,20 @@ const setGameBoard = (() => {
   }
 
   const handlePlay = (selectedArea, currentPlayer) => {
-    gameBoard.splice(
-      selectedArea - 1,
-      1,
-      currentPlayer.name == playerX ? "x" : "o"
-    );
-    console.log(selectedArea);
-    console.log(currentPlayer.name);
-    console.log(gameBoard);
-    finishGame();
+    const markingArea = document.getElementById(`${selectedArea}-position`);
+
+    if (markingArea.className == "undefined") {
+      const symbol = currentPlayer.name === playerX ? "x" : "o";
+
+      gameBoard.splice(selectedArea - 1, 1, symbol);
+
+      markingArea.className = symbol;
+      markingArea.textContent = symbol.toUpperCase();
+
+      finishGame();
+    } else {
+      alert("Select a non-marked area");
+    }
   };
 
   function clickEventAreas() {
@@ -114,8 +116,9 @@ const setGameBoard = (() => {
 })();
 
 const playerX = setGameBoard.player("playerX");
-const playerO = setGameBoard.player("playerY");
+const playerO = setGameBoard.player("playerO");
 
+console.log(setGameBoard.player);
 setGameBoard.clickEventAreas();
 
 setGameBoard.finishGame();
